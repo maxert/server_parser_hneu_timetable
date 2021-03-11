@@ -1,0 +1,27 @@
+{
+  "name": "diplome",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "dependencies": {
+    "casper": "^0.1.1",
+    "casperjs": "^1.1.4",
+    "cron": "^1.8.2",
+    "express": "^4.17.1",
+    "node-cron": "^2.0.3",
+    "phantomjs": "^2.1.7",
+    "puppeteer": "^5.5.0",
+    "selenium-webdriver": "^4.0.0-alpha.8",
+    "slimerjs": "^1.0.0"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "shelljs": "^0.8.4"
+  }
+}
