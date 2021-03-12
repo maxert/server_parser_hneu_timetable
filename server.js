@@ -1,12 +1,11 @@
 const express = require('express');
 const fs = require('fs')
-
 const cron = require("node-cron");
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
-const cors = require('cors');
 const app = express()
+
 cron.schedule("20 14 * * *", function () {
     BaseServer.start();
 });
@@ -16,9 +15,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
-
-app.use(cors());
 
 
 
