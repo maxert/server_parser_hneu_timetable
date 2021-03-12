@@ -27,8 +27,8 @@ app.get("/teacher", (req, res) => {
     console.log(teacher);
     res.send(JSON.parse(teacher));
 });
-
+const port = process.env.PORT||3000
 // start express server on port 5000
-app.listen(5000, () => {
+app.listen(port, () => {
     console.log("server started on port 5000");
 });
