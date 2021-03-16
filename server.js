@@ -6,10 +6,10 @@ const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
 const app = express()
-BaseServer.start();
-// cron.schedule("24 23 * * *", function () {
-//     BaseServer.start();
-// });
+// BaseServer.start();
+cron.schedule("24 23 * * *", function () {
+    BaseServer.start();
+});
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
