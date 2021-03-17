@@ -29,8 +29,7 @@ app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
 
-    const browser = await puppeteer.launch({
-        headless: true, args: [
+    const browser = await puppeteer.launch({headless: true, args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
         ],
