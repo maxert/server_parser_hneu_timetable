@@ -29,7 +29,6 @@ app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
 
-    res.end("yes")
     const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
 
@@ -38,8 +37,6 @@ app.post("/schedule", async (req, res) => {
     const result = await page.evaluate(() => {
         let data = [];
         let elements = document.querySelectorAll("body>table>tbody>tr");
-
-
         elements.forEach((Element, i) => {
             Element.querySelectorAll("#cell").forEach((Number, i) => {
                 if (Number.querySelectorAll("#element-table")[0]) {
@@ -54,6 +51,7 @@ app.post("/schedule", async (req, res) => {
         return data;
     });
     console.log(result);
+    res.end("yes")
 });
 app.get("/teacher", (req, res) => {
     console.log(teacher);
