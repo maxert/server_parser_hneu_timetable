@@ -3,6 +3,7 @@ const fs = require('fs')
 const cron = require("node-cron");
 const bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
+const cors = require("cors")
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
@@ -11,7 +12,7 @@ const app = express()
 cron.schedule("24 23 * * *", function () {
     BaseServer.start();
 });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
