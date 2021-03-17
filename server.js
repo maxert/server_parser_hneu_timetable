@@ -28,29 +28,32 @@ app.get("/group", (req, res) => {
 app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
-    console.log(groupNumber,studentNumber);
-    // const browser = await puppeteer.launch({headless: true});
-    // const page = await browser.newPage();
-    //
-    // await page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`);
-    //
-    // const result = await page.evaluate(() => {
-    //     let data = [];
-    //     let elements = document.querySelectorAll("body>table>tbody>tr");
-    //     elements.forEach((Element, i) => {
-    //         Element.querySelectorAll("#cell").forEach((Number, i) => {
-    //             if (Number.querySelectorAll("#element-table")[0]) {
-    //                 data.push({
-    //                     PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
-    //                     numberDay: i,
-    //                     block: Number.innerHTML
-    //                 })
-    //             }
-    //         });
-    //     });
-    //     return data;
-    // });
-    // console.log(result);
+
+    const browser = await puppeteer.launch({headless: true});
+    const page = await browser.newPage();
+    await Promise.all([
+        page.waitForNavigation(),
+       page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
+    ])
+
+
+    const result = await page.evaluate(() => {
+        let data = [];
+        let elements = document.querySelectorAll("body>table>tbody>tr");
+        elements.forEach((Element, i) => {
+            Element.querySelectorAll("#cell").forEach((Number, i) => {
+                if (Number.querySelectorAll("#element-table")[0]) {
+                    data.push({
+                        PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
+                        numberDay: i,
+                        block: Number.innerHTML
+                    })
+                }
+            });
+        });
+        return data;
+    });
+    console.log(result);
     res.end("yes")
 });
 app.get("/teacher", (req, res) => {
