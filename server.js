@@ -50,7 +50,7 @@ app.post("/schedule", async (req, res) => {
                     data.push({
                         PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
                         numberDay: i,
-                        block: ""+Number.innerHTML
+                        block: Number.innerHTML
                     })
                 }
             });
