@@ -28,7 +28,7 @@ app.get("/group", (req, res) => {
 app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
-
+    console.log(groupNumber,studentNumber);
     const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
 
