@@ -3,7 +3,13 @@ const fs = require('fs')
 module.exports = {
     start: function () {
         const scrape = async () => {
-            const browser = await puppeteer.launch({headless: true});
+            const browser = await puppeteer.launch({
+                headless: true,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                ],
+            });
             const page = await browser.newPage();
 
             await page.goto('http://services.hneu.edu.ua:8081/schedule/selection.jsf');
@@ -26,70 +32,67 @@ module.exports = {
             });
 
 
-                for (const elemVal of result[0].valueName) {
-                    await page.select("#group-form\\:faculty", elemVal.value);
+            for (const elemVal of result[0].valueName) {
+                await page.select("#group-form\\:faculty", elemVal.value);
+                await page.waitFor(100);
+
+                const click = await page.evaluate(() => {
+                    let data = [];
+                    let elements = document.querySelectorAll(`select#group-form\\:speciality option`); // Выбираем все товары
+                    elements.forEach(element => {
+                        data.push({value: element.value, name: element.innerHTML})
+                    })
+                    return data;
+                })
+                elemVal.facultet = click;
+                for (const facultet of elemVal.facultet) {
+
+                    await page.select("#group-form\\:speciality", facultet.value);
                     await page.waitFor(100);
 
                     const click = await page.evaluate(() => {
                         let data = [];
-                        let elements = document.querySelectorAll(`select#group-form\\:speciality option`); // Выбираем все товары
+                        let elements = document.querySelectorAll(`select#group-form\\:course option`); // Выбираем все товары
                         elements.forEach(element => {
-                            data.push({value: element.value, name: element.innerHTML})
+                            data.push({number: element.value})
                         })
                         return data;
                     })
-                    elemVal.facultet = click;
-                    for (const facultet of elemVal.facultet) {
+                    facultet.course = click;
+                    for (const group of facultet.course) {
 
-                        await page.select("#group-form\\:speciality", facultet.value);
+                        await page.select("#group-form\\:course", group.number);
                         await page.waitFor(100);
 
                         const click = await page.evaluate(() => {
                             let data = [];
-                            let elements = document.querySelectorAll(`select#group-form\\:course option`); // Выбираем все товары
+                            let elements = document.querySelectorAll(`select#group-form\\:group option`); // Выбираем все товары
                             elements.forEach(element => {
-                                data.push({number: element.value})
+                                data.push({value: element.value, name: element.innerHTML})
                             })
                             return data;
                         })
-                        facultet.course = click;
-                        for (const group of facultet.course) {
+                        group.group = click;
 
-                            await page.select("#group-form\\:course", group.number);
+                        for (const student of group.group) {
+
+                            await page.select("#group-form\\:group", student.value);
                             await page.waitFor(100);
 
                             const click = await page.evaluate(() => {
                                 let data = [];
-                                let elements = document.querySelectorAll(`select#group-form\\:group option`); // Выбираем все товары
+                                let elements = document.querySelectorAll(`select#group-form\\:student option`); // Выбираем все товары
                                 elements.forEach(element => {
                                     data.push({value: element.value, name: element.innerHTML})
                                 })
                                 return data;
                             })
-                            group.group = click;
-
-                            for (const student of group.group) {
-
-                                await page.select("#group-form\\:group", student.value);
-                                await page.waitFor(100);
-
-                                const click = await page.evaluate(() => {
-                                    let data = [];
-                                    let elements = document.querySelectorAll(`select#group-form\\:student option`); // Выбираем все товары
-                                    elements.forEach(element => {
-                                        data.push({value: element.value, name: element.innerHTML})
-                                    })
-                                    return data;
-                                })
 
 
-                                student.student = click;
+                            student.student = click;
 
-
-                            }
 
                         }
-
 
                     }
 
@@ -97,6 +100,7 @@ module.exports = {
                 }
 
 
+            }
 
 
             await page.click('#teacher-tab_cell')
@@ -145,7 +149,7 @@ module.exports = {
             browser.close();
             return {
                 group_student: result,
-                teacher:resultTeacher[6]
+                teacher: resultTeacher[6]
             }
         }
         scrape().then((value) => {

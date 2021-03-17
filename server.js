@@ -29,11 +29,16 @@ app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
 
-    const browser = await puppeteer.launch({headless: true});
+    const browser = await puppeteer.launch({
+        headless: true, args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ],
+    });
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-       page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
+        page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
     ])
 
 
