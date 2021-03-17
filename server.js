@@ -57,8 +57,8 @@ app.post("/schedule", async (req, res) => {
         });
         return data;
     });
-    console.log(result);
-    res.end("yes")
+    res.send(result);
+    res.status(201).end();
 });
 app.get("/teacher", (req, res) => {
     console.log(teacher);
