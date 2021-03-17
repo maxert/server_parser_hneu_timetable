@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs')
 const cron = require("node-cron");
+const  bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
@@ -11,6 +12,8 @@ cron.schedule("24 23 * * *", function () {
     BaseServer.start();
 });
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -24,8 +27,10 @@ app.get("/group", (req, res) => {
     res.send(JSON.parse(group));
 });
 app.post("/schedule", async ( req, res) => {
-    if(!req.body) return res.sendStatus(400);
-    console.log(req.body);
+    var user_name = req.body.user;
+    var password = req.body.password;
+    console.log("User name = "+user_name+", password is "+password);
+    res.end("yes")
     // const browser = await puppeteer.launch({headless: true});
     // const page = await browser.newPage();
     //
