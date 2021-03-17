@@ -3,7 +3,6 @@ const fs = require('fs')
 const cron = require("node-cron");
 const bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
-const cors = require("cors")
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
