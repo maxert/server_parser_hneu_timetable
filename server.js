@@ -12,7 +12,7 @@ const app = express()
 cron.schedule("24 23 * * *", function () {
     BaseServer.start();
 });
-app.use(cors());
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
