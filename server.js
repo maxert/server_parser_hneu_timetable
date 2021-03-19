@@ -50,7 +50,12 @@ app.post("/schedule", async (req, res) => {
                     data.push({
                         PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
                         numberDay: i,
-                        block: Number.innerHTML
+                        info: {
+                            title:Number.querySelectorAll("#schedule-link")[0].innerText,
+                            lesson:Number.querySelectorAll("#lessonType")[0].innerText,
+                            room:Number.querySelectorAll("#room")[0].innerText,
+                            teacher:Number.querySelectorAll("#teacher a")[0].innerText,
+                        }
                     })
                 }
             });
