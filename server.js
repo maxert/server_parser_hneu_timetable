@@ -3,6 +3,7 @@ const fs = require('fs')
 const cron = require("node-cron");
 const bodyParser = require('body-parser');
 const puppeteer = require('puppeteer');
+const cors = require('cors');
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
@@ -15,11 +16,13 @@ cron.schedule("24 23 * * *", function () {
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
+app.use(cors({origin: '*'}));
 
 app.get("/group", (req, res) => {
     console.log(group);
