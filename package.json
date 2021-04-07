@@ -13,7 +13,7 @@
     "heroku"
   ],
   "dependencies": {
-    "chromium-browser": "*",
+    "chromium": "2.2.0",
     "cors": "^2.8.5",
     "body-parser": "^1.19.0",
     "casper": "^0.1.1",
