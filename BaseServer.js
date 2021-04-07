@@ -155,14 +155,14 @@ module.exports = {
         scrape().then((value) => {
             fs.writeFile('group.json', JSON.stringify(value.group_student, null, 2), (err) => {
                 if (err) {
-                    console.log(err)
+                    console.log(err);
                 } else {
                     console.log('Saved Group!')
                 }
             })
             fs.writeFile('teacher.json', JSON.stringify(value.teacher, null, 2), (err) => {
                 if (err) {
-                    console.log(err)
+                    console.log(err);
                 } else {
                     console.log('Saved Teacher!')
                 }
