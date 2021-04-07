@@ -69,9 +69,10 @@ app.get("/schedule", async (req, res) => {
         });
         return data;
     });
-    await browser.close();
+
     res.send(result);
     res.status(201).end();
+    await browser.close();
 });
 app.get("/teacher", (req, res) => {
     console.log(teacher);
