@@ -36,10 +36,9 @@ app.get("/schedule", async (req, res) => {
     // const groupNumber = req.body.groupNumber;
     // const studentNumber = req.body.studentNumber;
 
-    const browser = await puppeteer.launch({headless: true, args: [
+    const browser = await puppeteer.launch({headless:true,args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage'
         ],
     });
     const page = await browser.newPage();
@@ -70,6 +69,7 @@ app.get("/schedule", async (req, res) => {
         });
         return data;
     });
+    await browser.close();
     res.send(result);
     res.status(201).end();
 });
