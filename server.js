@@ -8,6 +8,14 @@ const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
 const app = express()
+const browser = await puppeteer.launch({headless: true, args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage'
+    ],
+});
+const page = await browser.newPage();
+
 app.use(cors({
     origin: true,
     credentials: true
@@ -34,12 +42,7 @@ app.get("/schedule", async (req, res) => {
     // const groupNumber = req.body.groupNumber;
     // const studentNumber = req.body.studentNumber;
 
-    const browser = await puppeteer.launch({headless: true, args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ],
-    });
-    const page = await browser.newPage();
+
     await Promise.all([
         page.waitForNavigation(),
         page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${27961}&student=${398292}`)
