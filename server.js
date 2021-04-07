@@ -69,6 +69,7 @@ app.get("/schedule", async (req, res) => {
         });
         return data;
     });
+    console.log(result)
 
     res.send(result);
     res.status(201).end();
