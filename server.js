@@ -32,10 +32,10 @@ app.get("/group", (req, res) => {
     console.log(group);
     res.send(JSON.parse(group));
 });
-app.get("/schedule", async (req, res) => {
+app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
-    console.log(groupNumber,studentNumber);
+
 
     const browser = await puppeteer.launch({headless:true,args: [
             '--no-sandbox',
@@ -45,7 +45,7 @@ app.get("/schedule", async (req, res) => {
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        page.goto(`//services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
+        page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
     ])
 
 
@@ -70,11 +70,15 @@ app.get("/schedule", async (req, res) => {
         });
         return data;
     });
-    console.log(result)
+
 
     res.send(result);
     res.status(201).end();
+
+    console.log(result)
     await browser.close();
+
+
 });
 app.get("/teacher", (req, res) => {
     console.log(teacher);
