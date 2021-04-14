@@ -45,7 +45,7 @@ app.post("/schedule", async (req, res) => {
     });
     const page = await browser.newPage();
     await Promise.all([
-        page.waitFor(100),
+        page.waitForNavigation(),
         page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
     ])
 
