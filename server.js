@@ -7,7 +7,7 @@ const cors = require('cors');
 const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
-const app = express()
+const app = express();
 
 
 app.use(cors({
@@ -32,6 +32,7 @@ app.get("/group", (req, res) => {
     console.log(group);
     res.send(JSON.parse(group));
 });
+app.set('view cache', true);
 app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
@@ -44,7 +45,7 @@ app.post("/schedule", async (req, res) => {
     });
     const page = await browser.newPage();
     await Promise.all([
-        page.waitForNavigation(),
+        page.waitFor(100),
         page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
     ])
 
