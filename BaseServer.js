@@ -69,7 +69,7 @@ module.exports = {
                             let data = [];
                             let elements = document.querySelectorAll(`select#group-form\\:group option`); // Выбираем все товары
                             elements.forEach(element => {
-                                data.push({value: element.value, name: element.innerHTML})
+                                data.push({valueGroup: element.value, nameGroup: element.innerHTML})
                             })
                             return data;
                         })
@@ -77,7 +77,7 @@ module.exports = {
 
                         for (const student of group.group) {
 
-                            await page.select("#group-form\\:group", student.value);
+                            await page.select("#group-form\\:group", student.valueGroup);
                             await page.waitFor(150);
 
                             const click = await page.evaluate(() => {

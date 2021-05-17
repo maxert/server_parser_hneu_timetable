@@ -29,9 +29,33 @@ app.use(function(req, res, next) {
 
 
 app.get("/group", (req, res) => {
-    console.log(group);
     res.send(JSON.parse(group));
 });
+app.get("/search",(req,res)=>{
+    function search(obj, predicate) {
+        let result = [];
+        for(let p in obj) { // iterate on every property
+            // tip: here is a good idea to check for hasOwnProperty
+            if (typeof(obj[p]) == 'object') { // if its object - lets search inside it
+                result = result.concat(search(obj[p], predicate));
+            } else if (predicate(p, obj[p]))
+                result.push(
+                    obj
+                ); // check condition
+        }
+        return result;
+    }
+    const resultGroup = search(JSON.parse(group), function(key, value) { // im looking for this key value pair
+        return key === 'nameGroup';
+    });
+    const uniqueArray = resultGroup.filter((thing, index) => {
+        const _thing = JSON.stringify(thing);
+        return index === resultGroup.findIndex(obj => {
+            return JSON.stringify(obj) === _thing;
+        });
+    });
+   res.send(uniqueArray);
+})
 app.set('view cache', true);
 app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
