@@ -14,7 +14,7 @@ app.use(cors({
     origin: true,
     credentials: true
 }));
-// BaseServer.start();
+
 cron.schedule("24 23 * * *", function () {
     BaseServer.start();
 });
@@ -36,7 +36,7 @@ app.set('view cache', true);
 app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
-
+    const WeekNumber = req.body.WeekNumber;
 
     const browser = await puppeteer.launch({headless:true,args: [
             '--no-sandbox',
@@ -46,7 +46,7 @@ app.post("/schedule", async (req, res) => {
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&student=${studentNumber}`)
+        page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`)
     ])
 
 
@@ -88,5 +88,6 @@ app.get("/teacher", (req, res) => {
 const port = process.env.PORT || 3000
 // start express server on port 5000
 app.listen(port, () => {
-    console.log("server started on port 5000");
+    console.log("server started on port 3000");
 });
+app.use(express.static('public'));

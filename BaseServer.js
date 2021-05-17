@@ -1,5 +1,9 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs')
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://maxert1234:maxert1234@cluster0.hbmsm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
 module.exports = {
     start: function () {
         const scrape = async () => {
@@ -11,10 +15,7 @@ module.exports = {
                 ],
             });
             const page = await browser.newPage();
-
             await page.goto('http://services.hneu.edu.ua:8081/schedule/selection.jsf');
-
-
             const result = await page.evaluate(() => {
                 let data = [];
                 let elements = document.querySelectorAll('select.select');
@@ -31,10 +32,9 @@ module.exports = {
                 return data;
             });
 
-
             for (const elemVal of result[0].valueName) {
                 await page.select("#group-form\\:faculty", elemVal.value);
-                await page.waitFor(100);
+                await page.waitFor(150);
 
                 const click = await page.evaluate(() => {
                     let data = [];
@@ -48,7 +48,7 @@ module.exports = {
                 for (const facultet of elemVal.facultet) {
 
                     await page.select("#group-form\\:speciality", facultet.value);
-                    await page.waitFor(100);
+                    await page.waitFor(150);
 
                     const click = await page.evaluate(() => {
                         let data = [];
@@ -59,10 +59,11 @@ module.exports = {
                         return data;
                     })
                     facultet.course = click;
+
                     for (const group of facultet.course) {
 
                         await page.select("#group-form\\:course", group.number);
-                        await page.waitFor(100);
+                        await page.waitFor(150);
 
                         const click = await page.evaluate(() => {
                             let data = [];
@@ -77,7 +78,7 @@ module.exports = {
                         for (const student of group.group) {
 
                             await page.select("#group-form\\:group", student.value);
-                            await page.waitFor(100);
+                            await page.waitFor(150);
 
                             const click = await page.evaluate(() => {
                                 let data = [];
@@ -132,7 +133,7 @@ module.exports = {
 
             for (const resultTeacherList of resultTeacher[6].valueName) {
                 await page.select("#teacher-form\\:department", resultTeacherList.value);
-                await page.waitFor(100);
+                await page.waitFor(150);
                 const click = await page.evaluate(() => {
                     let data = [];
                     let elements = document.querySelectorAll(`select#teacher-form\\:employee option`); // Выбираем все товары
@@ -153,6 +154,12 @@ module.exports = {
             }
         }
         scrape().then((value) => {
+            client.connect(err => {
+                const collection = client.db("timetable").collection("all");
+                console.log(value.group_student);
+                collection.insertMany(value.group_student, {ordered: true});
+
+            });
             fs.writeFile('group.json', JSON.stringify(value.group_student, null, 2), (err) => {
                 if (err) {
                     console.log(err);
@@ -168,5 +175,5 @@ module.exports = {
                 }
             })
         })
-    }
+    },
 }

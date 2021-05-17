@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="localhost" id="1989dde7-1d7a-46c8-9366-738c31728dd9" keyPath="C:\Users\max97\Downloads\max.ppk" port="22" nameFormat="DESCRIPTIVE" username="max" />
+    </configs>
+  </component>
+</project>

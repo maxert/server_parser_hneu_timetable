@@ -1,7 +1,7 @@
 {
   "name": "diplome",
   "version": "1.0.0",
-  "main": "./server.js",
+  "main": "server.js",
   "engines": {
     "node": "15.x"
   },
@@ -13,7 +13,6 @@
     "heroku"
   ],
   "dependencies": {
-    "chromium": "2.2.0",
     "cors": "^2.8.5",
     "body-parser": "^1.19.0",
     "casper": "^0.1.1",
@@ -27,6 +26,7 @@
   },
   "devDependencies": {
     "cors": "^2.8.5",
+    "mongodb": "^3.6.6",
     "shelljs": "^0.8.4"
   }
 }
