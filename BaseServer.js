@@ -1,8 +1,8 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs')
-const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://maxert1234:maxert1234@cluster0.hbmsm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+// const MongoClient = require('mongodb').MongoClient;
+// const uri = "mongodb+srv://maxert1234:maxert1234@cluster0.hbmsm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 module.exports = {
     start: function () {
@@ -154,12 +154,12 @@ module.exports = {
             }
         }
         scrape().then((value) => {
-            client.connect(err => {
-                const collection = client.db("timetable").collection("all");
-                console.log(value.group_student);
-                collection.insertMany(value.group_student, {ordered: true});
-
-            });
+            // client.connect(err => {
+            //     const collection = client.db("timetable").collection("all");
+            //     console.log(value.group_student);
+            //     collection.insertMany(value.group_student, {ordered: true});
+            //
+            // });
             fs.writeFile('group.json', JSON.stringify(value.group_student, null, 2), (err) => {
                 if (err) {
                     console.log(err);
