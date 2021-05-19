@@ -11,9 +11,9 @@ const app = express();
 
 function search(obj, predicate) {
     let result = [];
-    for(let p in obj) { // iterate on every property
+    for (let p in obj) { // iterate on every property
         // tip: here is a good idea to check for hasOwnProperty
-        if (typeof(obj[p]) == 'object') { // if its object - lets search inside it
+        if (typeof (obj[p]) == 'object') { // if its object - lets search inside it
             result = result.concat(search(obj[p], predicate));
         } else if (predicate(p, obj[p]))
             result.push(
@@ -23,7 +23,7 @@ function search(obj, predicate) {
     return result;
 }
 
-const resultGroup = search(JSON.parse(group), function(key, value) { // im looking for this key value pair
+const resultGroup = search(JSON.parse(group), function (key, value) { // im looking for this key value pair
     return key === 'nameGroup';
 });
 const uniqueArray = resultGroup.filter((thing, index) => {
@@ -50,7 +50,7 @@ cron.schedule("24 23 * * *", function () {
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -60,9 +60,9 @@ app.use(function(req, res, next) {
 app.get("/group", (req, res) => {
     res.send(JSON.parse(group));
 });
-app.get("/search",(req,res)=>{
+app.get("/search", (req, res) => {
 
-   res.send(resultGroup);
+    res.send(resultGroup);
 })
 app.set('view cache', true);
 app.post("/schedule", async (req, res) => {
@@ -70,7 +70,8 @@ app.post("/schedule", async (req, res) => {
     const studentNumber = req.body.studentNumber;
     const WeekNumber = req.body.WeekNumber;
 
-    const browser = await puppeteer.launch({headless:true,args: [
+    const browser = await puppeteer.launch({
+        headless: true, args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
         ],
@@ -78,9 +79,8 @@ app.post("/schedule", async (req, res) => {
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`)
+        studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)
     ])
-
 
     const result = await page.evaluate(() => {
         let data = [];
@@ -92,10 +92,10 @@ app.post("/schedule", async (req, res) => {
                         PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
                         numberDay: i,
                         info: {
-                            title:Number.querySelectorAll("#subject")[0].innerText,
-                            lesson:Number.querySelectorAll("#lessonType")[0].innerText,
-                            room:Number.querySelectorAll("#room")[0].innerText,
-                            teacher:Number.querySelectorAll("#teacher")[0].innerText,
+                            title: Number.querySelectorAll("#subject")[0].innerText,
+                            lesson: Number.querySelectorAll("#lessonType")[0].innerText,
+                            room: Number.querySelectorAll("#room")[0].innerText,
+                            teacher: Number.querySelectorAll("#teacher")[0].innerText,
                         }
                     })
                 }
@@ -118,7 +118,6 @@ app.get("/teacher", (req, res) => {
     res.send(JSON.parse(teacher));
 });
 const port = process.env.PORT || 3000
-// start express server on port 5000
 app.listen(port, () => {
     console.log("server started on port 3000");
 });
