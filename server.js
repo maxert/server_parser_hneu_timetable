@@ -8,6 +8,11 @@ const group = fs.readFileSync("group.json")
 const teacher = fs.readFileSync("teacher.json")
 const BaseServer = require("./BaseServer.js");
 const app = express();
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+
 
 function search(obj, predicate) {
     let result = [];
@@ -39,10 +44,7 @@ fs.writeFile('GroupSearch.json', JSON.stringify(uniqueArray, null, 2), (err) => 
         console.log('Saved GroupSearch!')
     }
 })
-app.use(cors({
-    origin: true,
-    credentials: true
-}));
+
 
 cron.schedule("24 23 * * *", function () {
     BaseServer.start();
