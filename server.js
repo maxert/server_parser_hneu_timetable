@@ -12,6 +12,7 @@ app.use(cors({
     origin: true,
     credentials: true
 }));
+
 function search(obj, predicate) {
     let result = [];
     for (let p in obj) { // iterate on every property
@@ -25,8 +26,9 @@ function search(obj, predicate) {
     }
     return result;
 }
-const teacherResult = ()=>{
-    for(const element of teacher){
+
+const teacherResult = () => {
+    for (const element of teacher) {
         console.log(element);
     }
 }
@@ -82,15 +84,12 @@ app.post("/schedule", async (req, res) => {
             '--disable-setuid-sandbox',
         ],
     });
-    console.log(Employee);
-    console.log(WeekNumber);
-    console.log(studentNumber);
-    console.log(groupNumber);
+
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        Employee===undefined?(
-        studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)):(page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
+        Employee === undefined ? (
+            studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)) : (page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
     ])
 
     const result = await page.evaluate(() => {
@@ -103,11 +102,11 @@ app.post("/schedule", async (req, res) => {
                         PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
                         numberDay: i,
                         info: {
-                            title: Number.querySelectorAll("#subject")[0]&&Number.querySelectorAll("#subject")[0].innerText,
-                            lesson:Number.querySelectorAll("#lessonType")[0]&& Number.querySelectorAll("#lessonType")[0].innerText,
-                            room: Number.querySelectorAll("#room")[0]&&Number.querySelectorAll("#room")[0].innerText,
-                            teacher: Number.querySelectorAll("#teacher")[0]&&Number.querySelectorAll("#teacher")[0].innerText,
-                            group: Number.querySelectorAll("#group")[0].innerText
+                            title: Number.querySelectorAll("#subject")[0] && Number.querySelectorAll("#subject")[0].innerText,
+                            lesson: Number.querySelectorAll("#lessonType")[0] && Number.querySelectorAll("#lessonType")[0].innerText,
+                            room: Number.querySelectorAll("#room")[0] && Number.querySelectorAll("#room")[0].innerText,
+                            teacher: Number.querySelectorAll("#teacher")[0] && Number.querySelectorAll("#teacher")[0].innerText,
+                            group: Number.querySelectorAll("#group")[0]&&Number.querySelectorAll("#group")[0].innerText
                         }
                     })
                 }
