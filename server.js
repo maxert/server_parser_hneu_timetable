@@ -12,8 +12,6 @@ app.use(cors({
     origin: true,
     credentials: true
 }));
-
-
 function search(obj, predicate) {
     let result = [];
     for (let p in obj) { // iterate on every property
@@ -27,7 +25,11 @@ function search(obj, predicate) {
     }
     return result;
 }
-
+const teacherResult = ()=>{
+    for(const element of teacher){
+        console.log(element);
+    }
+}
 const resultGroup = search(JSON.parse(group), function (key, value) { // im looking for this key value pair
     return key === 'nameGroup';
 });
@@ -62,6 +64,7 @@ app.use(function (req, res, next) {
 app.get("/group", (req, res) => {
     res.send(JSON.parse(group));
 });
+
 app.get("/search", (req, res) => {
 
     res.send(resultGroup);
@@ -71,6 +74,7 @@ app.post("/schedule", async (req, res) => {
     const groupNumber = req.body.groupNumber;
     const studentNumber = req.body.studentNumber;
     const WeekNumber = req.body.WeekNumber;
+    const Employee = req.body.EmployeeNumber;
 
     const browser = await puppeteer.launch({
         headless: true, args: [
@@ -78,10 +82,15 @@ app.post("/schedule", async (req, res) => {
             '--disable-setuid-sandbox',
         ],
     });
+    console.log(Employee);
+    console.log(WeekNumber);
+    console.log(studentNumber);
+    console.log(groupNumber);
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)
+        Employee===undefined?(
+        studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)):(page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
     ])
 
     const result = await page.evaluate(() => {
@@ -94,10 +103,11 @@ app.post("/schedule", async (req, res) => {
                         PARA: parseInt(Number.parentElement.querySelectorAll(".pair")[0].innerText),
                         numberDay: i,
                         info: {
-                            title: Number.querySelectorAll("#subject")[0].innerText,
-                            lesson: Number.querySelectorAll("#lessonType")[0].innerText,
-                            room: Number.querySelectorAll("#room")[0].innerText,
-                            teacher: Number.querySelectorAll("#teacher")[0].innerText,
+                            title: Number.querySelectorAll("#subject")[0]&&Number.querySelectorAll("#subject")[0].innerText,
+                            lesson:Number.querySelectorAll("#lessonType")[0]&& Number.querySelectorAll("#lessonType")[0].innerText,
+                            room: Number.querySelectorAll("#room")[0]&&Number.querySelectorAll("#room")[0].innerText,
+                            teacher: Number.querySelectorAll("#teacher")[0]&&Number.querySelectorAll("#teacher")[0].innerText,
+                            group: Number.querySelectorAll("#group")[0].innerText
                         }
                     })
                 }
@@ -116,7 +126,6 @@ app.post("/schedule", async (req, res) => {
 
 });
 app.get("/teacher", (req, res) => {
-    console.log(teacher);
     res.send(JSON.parse(teacher));
 });
 const port = process.env.PORT || 3000
