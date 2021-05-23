@@ -79,8 +79,8 @@ app.post("/schedule", async (req, res) => {
     const Employee = req.body.EmployeeNumber;
     console.log(studentNumber, 1);
     console.log(Employee, 1);
-    console.log(typeof(Employee));
-    console.log(typeof(studentNumber));
+    console.log(typeof (Employee));
+    console.log(typeof (studentNumber));
 
     const browser = await puppeteer.launch({
         headless: true, args: [
@@ -92,8 +92,8 @@ app.post("/schedule", async (req, res) => {
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        Employee === "null"? (
-            studentNumber !== "null" ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)) : (page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
+        Employee === 0 ? (
+            studentNumber !== 0 ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)) : (page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
     ])
 
     const result = await page.evaluate(() => {
@@ -110,7 +110,7 @@ app.post("/schedule", async (req, res) => {
                             lesson: Number.querySelectorAll("#lessonType")[0] && Number.querySelectorAll("#lessonType")[0].innerText,
                             room: Number.querySelectorAll("#room")[0] && Number.querySelectorAll("#room")[0].innerText,
                             teacher: Number.querySelectorAll("#teacher")[0] && Number.querySelectorAll("#teacher")[0].innerText,
-                            group: Number.querySelectorAll("#group")[0]&&Number.querySelectorAll("#group")[0].innerText
+                            group: Number.querySelectorAll("#group")[0] && Number.querySelectorAll("#group")[0].innerText
                         }
                     })
                 }
