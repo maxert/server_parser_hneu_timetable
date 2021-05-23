@@ -77,6 +77,8 @@ app.post("/schedule", async (req, res) => {
     const studentNumber = req.body.studentNumber;
     const WeekNumber = req.body.WeekNumber;
     const Employee = req.body.EmployeeNumber;
+    console.log(studentNumber, 1);
+    console.log(Employee, 1);
 
     const browser = await puppeteer.launch({
         headless: true, args: [
