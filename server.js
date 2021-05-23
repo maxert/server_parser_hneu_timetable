@@ -92,7 +92,7 @@ app.post("/schedule", async (req, res) => {
     const page = await browser.newPage();
     await Promise.all([
         page.waitForNavigation(),
-        Employee === undefined ? (
+        Employee === typeof(Employee)? (
             studentNumber !== undefined ? page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}&student=${studentNumber}`) : page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?group=${groupNumber}&week=${WeekNumber}`)) : (page.goto(`http://services.hneu.edu.ua:8081/schedule/schedule?employee=${Employee}&week=${WeekNumber}`))
     ])
 
